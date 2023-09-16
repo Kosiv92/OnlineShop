@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using OnlineShop.Web.Data;
+using OnlineShop.Persistence;
 
 var builder = WebApplication.CreateBuilder(args);
 
