@@ -7,7 +7,7 @@ namespace OnlineShop.Domain
 
         public string? Description { get; set; }
 
-        ICollection<Category> Categories { get; set; }
+        public ICollection<Category> Categories { get; set; }
 
         public decimal Cost { get; set; }
     }
