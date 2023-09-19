@@ -1,6 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using OnlineShop.Domain;
+using OnlineShop.Persistence.Repositories;
 
 namespace OnlineShop.Persistence
 {
@@ -11,8 +13,10 @@ namespace OnlineShop.Persistence
             var connectionString = configuration.GetConnectionString("DefaultConnection");
 
             services.AddDbContext<ApplicationDbContext>(options =>
-                options.UseSqlServer(connectionString, 
-                b => b.MigrationsAssembly("OnlineShop.Web")));                          
+                options.UseSqlServer(connectionString,
+                b => b.MigrationsAssembly("OnlineShop.Web")))
+                .AddTransient<IRepository<Product>, EfRepository<Product>>()
+                .AddTransient<IRepository<Category>, EfRepository<Category>>();
 
             return services;
         }

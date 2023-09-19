@@ -8,7 +8,8 @@ namespace OnlineShop.Persistence
     {
         public void Configure(EntityTypeBuilder<Product> builder)
         {
-            builder.ToTable("Products");
+            builder.ToTable("Products")
+                .HasData(SeedDataFactory.Products);
 
             builder.HasKey(x => x.Id);
 
@@ -29,7 +30,18 @@ namespace OnlineShop.Persistence
 
             builder.HasMany(x => x.Categories)
                 .WithMany(x => x.Products)
-                .UsingEntity("ProductCategory");
+                .UsingEntity(j => j
+                .ToTable("ProductCategory")
+                .HasData(new[]
+                {
+                   new { ProductsId = 1, CategoriesId = 1 },
+                   new { ProductsId = 1, CategoriesId = 2 },
+                   new { ProductsId = 2, CategoriesId = 1 },
+                   new { ProductsId = 2, CategoriesId = 3 },
+                   new { ProductsId = 3, CategoriesId = 1 },
+                   new { ProductsId = 3, CategoriesId = 2 },
+                   new { ProductsId = 3, CategoriesId = 3 },
+                }));
         }
     }
 }

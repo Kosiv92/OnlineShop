@@ -8,7 +8,8 @@ namespace OnlineShop.Persistence
     {
         public void Configure(EntityTypeBuilder<Category> builder)
         {
-            builder.ToTable("Categories");
+            builder.ToTable("Categories")
+                .HasData(SeedDataFactory.Categories);
 
             builder.HasKey(x => x.Id);
 
@@ -16,7 +17,8 @@ namespace OnlineShop.Persistence
 
             builder.Property(x => x.Name)
                 .HasMaxLength(110)
-                .IsRequired();                        
+                .IsRequired();
+           
         }
     }
 }

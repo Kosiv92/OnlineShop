@@ -3,17 +3,19 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using OnlineShop.Persistence;
 
 #nullable disable
 
-namespace OnlineShop.Web.Data.Migrations
+namespace OnlineShop.Web.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230919155019_SeedData")]
+    partial class SeedData
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -21,6 +23,58 @@ namespace OnlineShop.Web.Data.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
+
+            modelBuilder.Entity("CategoryProduct", b =>
+                {
+                    b.Property<int>("CategoriesId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ProductsId")
+                        .HasColumnType("int");
+
+                    b.HasKey("CategoriesId", "ProductsId");
+
+                    b.HasIndex("ProductsId");
+
+                    b.ToTable("ProductCategory", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            CategoriesId = 1,
+                            ProductsId = 1
+                        },
+                        new
+                        {
+                            CategoriesId = 2,
+                            ProductsId = 1
+                        },
+                        new
+                        {
+                            CategoriesId = 1,
+                            ProductsId = 2
+                        },
+                        new
+                        {
+                            CategoriesId = 3,
+                            ProductsId = 2
+                        },
+                        new
+                        {
+                            CategoriesId = 1,
+                            ProductsId = 3
+                        },
+                        new
+                        {
+                            CategoriesId = 2,
+                            ProductsId = 3
+                        },
+                        new
+                        {
+                            CategoriesId = 3,
+                            ProductsId = 3
+                        });
+                });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
                 {
@@ -242,6 +296,23 @@ namespace OnlineShop.Web.Data.Migrations
                     b.HasIndex("Id");
 
                     b.ToTable("Categories", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Name = "Clothes"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Name = "Male"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Name = "Female"
+                        });
                 });
 
             modelBuilder.Entity("OnlineShop.Domain.Product", b =>
@@ -270,21 +341,44 @@ namespace OnlineShop.Web.Data.Migrations
                     b.HasIndex("Id");
 
                     b.ToTable("Products", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Cost = 250m,
+                            Description = "Two greats. One shoe. The AJ6 x PSG delivers American boldness and Parisian flair, repping legends on both the court and the pitch.",
+                            Name = "Nike Air Jordan"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Cost = 70m,
+                            Description = "PUMA and lemlem come together in a first-of-its-kind collaboration. These biker shorts feature one of lemlem’s signature patterns with asymmetrical pops of color.",
+                            Name = "PUMA LEMLEM Shorts"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Cost = 35m,
+                            Description = "This product is excluded from all promotional discounts and offers.",
+                            Name = "Adidas Prime Backpack"
+                        });
                 });
 
-            modelBuilder.Entity("ProductCategory", b =>
+            modelBuilder.Entity("CategoryProduct", b =>
                 {
-                    b.Property<int>("CategoriesId")
-                        .HasColumnType("int");
+                    b.HasOne("OnlineShop.Domain.Category", null)
+                        .WithMany()
+                        .HasForeignKey("CategoriesId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
-                    b.Property<int>("ProductsId")
-                        .HasColumnType("int");
-
-                    b.HasKey("CategoriesId", "ProductsId");
-
-                    b.HasIndex("ProductsId");
-
-                    b.ToTable("ProductCategory");
+                    b.HasOne("OnlineShop.Domain.Product", null)
+                        .WithMany()
+                        .HasForeignKey("ProductsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -334,21 +428,6 @@ namespace OnlineShop.Web.Data.Migrations
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("ProductCategory", b =>
-                {
-                    b.HasOne("OnlineShop.Domain.Category", null)
-                        .WithMany()
-                        .HasForeignKey("CategoriesId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("OnlineShop.Domain.Product", null)
-                        .WithMany()
-                        .HasForeignKey("ProductsId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
