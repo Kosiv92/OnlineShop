@@ -9,6 +9,6 @@ namespace OnlineShop.Domain
 
         public ICollection<Category> Categories { get; set; }
 
-        public decimal Cost { get; set; }
+        public decimal Price { get; set; }
     }
 }

@@ -24,7 +24,7 @@ namespace OnlineShop.Persistence
             .IsRequired(false);
 
             //TODO: разобраться как добавить ограничение на неотрицательные значения
-            builder.Property(x => x.Cost)
+            builder.Property(x => x.Price)
             .IsRequired()
             .HasPrecision(15, 2);
 
