@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using OnlineShop.Domain;
 
-namespace OnlineShop.Persistence
+namespace OnlineShop.DbContext
 {
     internal class ProductConfig : IEntityTypeConfiguration<Product>
     {

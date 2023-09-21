@@ -1,6 +1,6 @@
 ﻿using OnlineShop.Domain;
 
-namespace OnlineShop.Persistence
+namespace OnlineShop.DbContext
 {
     public static class SeedDataFactory
     {

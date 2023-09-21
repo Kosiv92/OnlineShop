@@ -2,9 +2,8 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using OnlineShop.Domain;
-using OnlineShop.Persistence.Repositories;
 
-namespace OnlineShop.Persistence
+namespace OnlineShop.DbContext
 {
     public static class ServiceCollectionExtensions
     {

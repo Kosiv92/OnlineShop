@@ -4,8 +4,7 @@ using Microsoft.Extensions.Configuration;
 using NLog;
 using NLog.Web;
 using OnlineShop.Domain;
-using OnlineShop.Persistence;
-using OnlineShop.Persistence.Repositories;
+using OnlineShop.DbContext;
 using System.Reflection;
 
 var logger = NLog.LogManager

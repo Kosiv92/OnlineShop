@@ -4,19 +4,23 @@ using AutoMapper;
 using AutoMapper.QueryableExtensions;
 using Microsoft.Extensions.Logging;
 using Microsoft.EntityFrameworkCore;
+using OnlineShop.Web.Models.Product;
 
 namespace OnlineShop.Web.Controllers
 {
     public class ProductController : Controller
     {
-        IRepository<Product> _repository;
+        IRepository<Product> _productRepository;
+        IRepository<Category> _categoryRepository;
         ILogger<ProductController> _logger;
         IMapper _mapper;
 
-        public ProductController(IRepository<Product> repository,
-            ILogger<ProductController> logger, IMapper mapper)
+        public ProductController(IRepository<Product> productRepository, 
+            IRepository<Category> categoryRepository, ILogger<ProductController> logger, 
+            IMapper mapper)
         {
-            _repository = repository;
+            _productRepository = productRepository;
+            _categoryRepository = categoryRepository;
             _logger = logger;
             _mapper = mapper;
         }
@@ -30,7 +34,9 @@ namespace OnlineShop.Web.Controllers
             _logger.LogDebug($"User {HttpContext.User.Identity.Name} try to get Index view");
             try
             {
-                var products = _repository.GetAll().Include(p => p.Categories);                
+                var products = _productRepository
+                    .GetAll()
+                    .Include(p => p.Categories);                
 
                 productsDTO = products
                     .ProjectTo<ProductListItemDTO>(_mapper.ConfigurationProvider);                                
@@ -56,7 +62,9 @@ namespace OnlineShop.Web.Controllers
         // GET: ProductController/Create
         public ActionResult Create()
         {
-            return View();
+            var productCreateVM = new ProductCreateVM();
+            
+            return View(productCreateVM);
         }
 
         // POST: ProductController/Create

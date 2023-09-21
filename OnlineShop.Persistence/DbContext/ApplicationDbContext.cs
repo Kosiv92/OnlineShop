@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using OnlineShop.Domain;
 using System.Reflection;
 
-namespace OnlineShop.Persistence
+namespace OnlineShop.DbContext
 {
     public class ApplicationDbContext : IdentityDbContext
     {

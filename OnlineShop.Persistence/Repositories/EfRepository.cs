@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using OnlineShop.Domain;
 
-namespace OnlineShop.Persistence.Repositories
+namespace OnlineShop.DbContext
 {
     public class EfRepository<T> : IRepository<T> where T : BaseEntity
     {
