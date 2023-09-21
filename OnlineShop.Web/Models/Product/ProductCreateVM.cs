@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc.Rendering;
+using OnlineShop.Contracts;
 
 namespace OnlineShop.Web.Models.Product
 {

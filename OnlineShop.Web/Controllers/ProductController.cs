@@ -1,30 +1,20 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using OnlineShop.Domain;
-using AutoMapper;
-using AutoMapper.QueryableExtensions;
-using Microsoft.Extensions.Logging;
-using Microsoft.EntityFrameworkCore;
 using OnlineShop.Web.Models.Product;
+using OnlineShop.Contracts;
+using OnlineShop.Services.Interfaces;
 
 namespace OnlineShop.Web.Controllers
 {
     public class ProductController : Controller
     {
-        IRepository<Product> _productRepository;
-        IRepository<Category> _categoryRepository;
         ILogger<ProductController> _logger;
-        IMapper _mapper;
+        IProductService _productService;
 
-        public ProductController(IRepository<Product> productRepository, 
-            IRepository<Category> categoryRepository, ILogger<ProductController> logger, 
-            IMapper mapper)
+        public ProductController(ILogger<ProductController> logger, IProductService productService)
         {
-            _productRepository = productRepository;
-            _categoryRepository = categoryRepository;
             _logger = logger;
-            _mapper = mapper;
+            _productService = productService;
         }
-
 
         // GET: ProductController
         public ActionResult Index()
@@ -34,12 +24,7 @@ namespace OnlineShop.Web.Controllers
             _logger.LogDebug($"User {HttpContext.User.Identity.Name} try to get Index view");
             try
             {
-                var products = _productRepository
-                    .GetAll()
-                    .Include(p => p.Categories);                
-
-                productsDTO = products
-                    .ProjectTo<ProductListItemDTO>(_mapper.ConfigurationProvider);                                
+                productsDTO = _productService.GetAllDTO();                              
 
             }
             catch (Exception ex)

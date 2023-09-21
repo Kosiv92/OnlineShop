@@ -16,8 +16,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\OnlineShop.Contracts\OnlineShop.Contracts.csproj" />
     <ProjectReference Include="..\OnlineShop.Domain\OnlineShop.Domain.csproj" />
-    <ProjectReference Include="..\OnlineShop.Persistence\OnlineShop.DbContext.csproj" />     
+    <ProjectReference Include="..\OnlineShop.Persistence\OnlineShop.DbContext.csproj" />
+    <ProjectReference Include="..\OnlineShop.Services\OnlineShop.Services.csproj" />     
   </ItemGroup>
 
 </Project>
