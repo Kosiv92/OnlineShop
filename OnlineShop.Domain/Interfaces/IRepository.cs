@@ -2,7 +2,7 @@
 {
     public interface IRepository<T> where T : BaseEntity
     {
-        public Task<T?> GetByIdAsync(int? id);
+        public Task<T?> GetById(int? id);
 
         public IQueryable<T> GetAll();
 

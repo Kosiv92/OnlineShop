@@ -18,7 +18,7 @@ namespace OnlineShop.Contracts
         public decimal Price { get; init; }
 
         [Required(ErrorMessage = "Categories must be selected")]
-        [DisplayName("Price")]
-        public List<int> CategoriesID { get; init; }
+        [DisplayName("Categories")]
+        public string[] CategoryIds { get; init; }
     }
 }

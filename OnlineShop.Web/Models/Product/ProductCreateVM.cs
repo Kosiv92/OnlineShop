@@ -7,6 +7,6 @@ namespace OnlineShop.Web.Models.Product
     {
         public ProductCreateRequest Request { get; set; }
 
-        public IEnumerable<MultiSelectList> CategorySelectListItem { get; set; }
+        public IEnumerable<SelectListItem> CategorySelectListItem { get; set; }
     }
 }

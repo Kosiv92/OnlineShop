@@ -14,7 +14,8 @@ namespace OnlineShop.DbContext
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(connectionString,
                 b => b.MigrationsAssembly("OnlineShop.Web")))
-                .AddTransient<IRepository<Product>, EfRepository<Product>>()
+                .AddTransient<IRepository<Product>, ProductRepository>()
+                //.AddTransient<IRepository<Product>, EfRepository<Product>>()
                 .AddTransient<IRepository<Category>, EfRepository<Category>>();
 
             return services;

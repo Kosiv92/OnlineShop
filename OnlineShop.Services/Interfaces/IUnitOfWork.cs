@@ -6,7 +6,7 @@ namespace OnlineShop.Services
     {
         public IRepository<Product> ProductRepository { get; }
 
-        public IRepository<Product> CategoryRepository { get; }
+        public IRepository<Category> CategoryRepository { get; }
 
         public Task SaveAsync();
     }

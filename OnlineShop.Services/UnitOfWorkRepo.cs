@@ -22,7 +22,7 @@ namespace OnlineShop.Services
             {
                 if(_productRepository == null)
                 {
-                    _productRepository = new EfRepository<Product>(_context);
+                    _productRepository = new ProductRepository(_context);
                 }
                 return _productRepository;
             }
@@ -39,8 +39,6 @@ namespace OnlineShop.Services
                 return _categoryRepository;
             }
         }
-
-        IRepository<Product> IUnitOfWork.CategoryRepository => throw new NotImplementedException();
 
         public async Task SaveAsync()
         {

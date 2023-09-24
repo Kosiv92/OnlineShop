@@ -2,6 +2,7 @@
 using AutoMapper.QueryableExtensions;
 using Microsoft.EntityFrameworkCore;
 using OnlineShop.Contracts;
+using OnlineShop.Domain;
 using OnlineShop.Services.Interfaces;
 
 namespace OnlineShop.Services
@@ -17,6 +18,27 @@ namespace OnlineShop.Services
             _mapper = mapper;
         }
 
+        #region CREATE
+
+        public async Task Create(ProductCreateRequest request)
+        {
+            var newProduct = _mapper.Map<Product>(request);
+
+            foreach(var categoryId in request.CategoryIds)
+            {
+                newProduct.Categories.Add(
+                    await _unitOfWork.CategoryRepository.GetById(Int32.Parse(categoryId))
+                    //new Category { Id = Int32.Parse(categoryId) }                    
+                    );
+            }
+
+            await _unitOfWork.ProductRepository.CreateAsync(newProduct);
+        }
+
+        #endregion
+
+        #region READ
+
         public IQueryable<ProductListItemDTO> GetAllDTO()
         {
             var products = _unitOfWork.ProductRepository
@@ -28,5 +50,22 @@ namespace OnlineShop.Services
 
             return productsDTO;
         }
+
+        public async Task<ProductInfoDTO> GetProductDTOAsync(int id)
+            => _mapper.Map<ProductInfoDTO>(await _unitOfWork.ProductRepository.GetById(id));
+        
+
+        #endregion
+
+        #region DELETE
+
+        public async Task Delete(int id)
+        {
+            await _unitOfWork.ProductRepository
+                .DeleteAsync(id);                        
+        }       
+
+        #endregion
+
     }
 }

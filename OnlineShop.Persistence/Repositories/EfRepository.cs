@@ -3,7 +3,7 @@ using OnlineShop.Domain;
 
 namespace OnlineShop.DbContext
 {
-    public class EfRepository<T> : IRepository<T> where T : BaseEntity
+    public sealed class EfRepository<T> : IRepository<T> where T : BaseEntity
     {
         public ApplicationDbContext _context;
         public DbSet<T> _dbSet;
@@ -36,8 +36,8 @@ namespace OnlineShop.DbContext
             return _context.Set<T>().AsQueryable();
         }
 
-        public async Task<T?> GetByIdAsync(int? id)
-            => await _dbSet.FirstOrDefaultAsync(x => x.Id == id);
+        public Task<T?> GetById(int? id)
+            => _dbSet.FirstOrDefaultAsync(x => x.Id == id);
 
 
         public async Task SaveChangesAsync()

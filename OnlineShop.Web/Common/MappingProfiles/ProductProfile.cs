@@ -8,11 +8,18 @@ namespace OnlineShop.Web.Common
     {
         public ProductProfile()
         {
+            //FROM
             CreateMap<Product, ProductListItemDTO>()                
                 .ForMember(p => p.Categories, opt =>
                 opt.MapFrom(com => com.Categories.Count > 1 
                 ? string.Join(", ", com.Categories.Select(c => c.Name)) 
                 : com.Categories.Single().Name));
+
+            CreateMap<Product, ProductInfoDTO>();
+
+            //TO
+
+            CreateMap<ProductCreateRequest, Product>();
         }
     }
 }

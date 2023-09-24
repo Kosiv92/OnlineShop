@@ -9,7 +9,9 @@ namespace OnlineShop.Services
         {
             services.AddTransient<IUnitOfWork, UnitOfWorkRepo>();
 
-            services.AddTransient<IProductService, ProductService>();                   
+            services.AddTransient<IProductService, ProductService>();
+
+            services.AddTransient<ICategoryService, CategoryService>();
 
             return services;
         }
