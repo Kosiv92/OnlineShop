@@ -45,14 +45,14 @@ namespace OnlineShop.Web.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> Details(int? id)
+        public async Task<IActionResult> Details(int id)
         {
-            if (id == null || id <= 0)
+            if (id <= 0)
             {
                 return NotFound();
             }
 
-            var productDTO = await _productService.GetProductDTOAsync(id.Value);
+            var productDTO = await _productService.GetProductInfoDTOAsync(id);
 
             if (productDTO is null)
             {
@@ -103,24 +103,57 @@ namespace OnlineShop.Web.Controllers
             }
         }
 
-        // GET: ProductController/Edit/5
-        public ActionResult Edit(int id)
+        [HttpGet]
+        public async Task<IActionResult> Edit(int id)
         {
-            return View();
-        }
+            if (id <= 0)
+            {
+                return NotFound();
+            }
 
-        // POST: ProductController/Edit/5
+            var editDTO = await _productService.GetProductEditDTOAsync(id);
+
+            if (editDTO is null)
+            {
+                return NotFound();
+            }
+
+            var editVM = new ProductEditVM()
+            {
+                Request = editDTO,
+                CategorySelectListItem = _categoryService
+                .GetAllDTO()
+                .Select(c => new SelectListItem(c.Name, c.Id.ToString()))
+            };
+
+            return View(editVM);
+        }
+                
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, IFormCollection collection)
+        public async Task<IActionResult> Edit(ProductEditRequest request)
         {
+            if (!ModelState.IsValid)
+            {
+                return View(new ProductEditVM
+                {
+                    Request = request,
+                    CategorySelectListItem = _categoryService
+                        .GetAllDTO()
+                        .Select(c => new SelectListItem(c.Name, c.Id.ToString()))
+                });
+            }
+
             try
             {
+                await _productService.Edit(request);
+
                 return RedirectToAction(nameof(Index));
             }
             catch
             {
-                return View();
+                return RedirectToAction(nameof(HomeController.Error),
+                    nameof(HomeController));
             }
         }
 

@@ -6,10 +6,14 @@ namespace OnlineShop.Services.Interfaces
     {
         public IQueryable<ProductListItemDTO> GetAllDTO();
 
-        public Task<ProductInfoDTO> GetProductDTOAsync(int id);
+        public Task<ProductInfoDTO> GetProductInfoDTOAsync(int id);
+
+        public Task<ProductEditRequest> GetProductEditDTOAsync(int id);
 
         public Task Delete(int id);
 
         public Task Create(ProductCreateRequest request);
+
+        public Task Edit(ProductEditRequest request);
     }
 }

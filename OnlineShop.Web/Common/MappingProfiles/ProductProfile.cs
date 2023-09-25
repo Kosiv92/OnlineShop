@@ -17,6 +17,10 @@ namespace OnlineShop.Web.Common
 
             CreateMap<Product, ProductInfoDTO>();
 
+            CreateMap<Product, ProductEditRequest>()
+                .ForMember(p => p.CategoryIds, opt =>
+                opt.MapFrom(com => com.Categories.Select(c => c.Id.ToString())));
+
             //TO
 
             CreateMap<ProductCreateRequest, Product>();

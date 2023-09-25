@@ -49,14 +49,13 @@
         </dd>
     </dl>
 </div>
-<div>
-    @Html.ActionLink("Edit", "Edit", new { /* id = Model.PrimaryKey */ })
-    | @Html.ActionLink("Delete (Html)", "Delete", new {  id = Model.Id  })
+<div>   
     <form asp-action="Delete">
         <input name="id" value="@Model.Id" hidden />
         <button class="btn btn-danger" type="submit">
             Delete
-        </button>
-        <a class="btn btn-info" asp-action="Index">Back to List</a>
+        </button>        
     </form>
+    <a class="btn btn-secondary" asp-action="Edit" asp-route-id="@Model.Id">Edit</a>
+    <a class="btn btn-info" asp-action="Index">Back to List</a>
 </div>

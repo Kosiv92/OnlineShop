@@ -27,9 +27,8 @@ namespace OnlineShop.Services
             foreach(var categoryId in request.CategoryIds)
             {
                 newProduct.Categories.Add(
-                    await _unitOfWork.CategoryRepository.GetById(Int32.Parse(categoryId))
-                    //new Category { Id = Int32.Parse(categoryId) }                    
-                    );
+                    await _unitOfWork.CategoryRepository
+                    .GetById(int.Parse(categoryId)));
             }
 
             await _unitOfWork.ProductRepository.CreateAsync(newProduct);
@@ -51,9 +50,44 @@ namespace OnlineShop.Services
             return productsDTO;
         }
 
-        public async Task<ProductInfoDTO> GetProductDTOAsync(int id)
+        public async Task<ProductInfoDTO> GetProductInfoDTOAsync(int id)
             => _mapper.Map<ProductInfoDTO>(await _unitOfWork.ProductRepository.GetById(id));
-        
+
+        public async Task<ProductEditRequest?> GetProductEditDTOAsync(int id)
+        {
+            var product = await _unitOfWork.ProductRepository.GetById(id);
+            if (product == null) return null;
+
+            var editDTO = _mapper.Map<ProductEditRequest?>(product);
+
+            return editDTO;
+        }
+
+        #endregion
+
+        #region UPDATE
+
+        public async Task Edit(ProductEditRequest request)
+        {
+            var editProduct = await _unitOfWork.ProductRepository.GetById(request.Id);
+
+            editProduct.Name = request.Name;
+            editProduct.Description = request.Description;
+            editProduct.Price = request.Price;
+
+            List<Category> categories = new List<Category>();
+
+            foreach (var categoryId in request.CategoryIds)
+            {
+                categories.Add(
+                    await _unitOfWork.CategoryRepository
+                    .GetById(int.Parse(categoryId)));
+            }
+
+            editProduct.Categories = categories;
+
+            await _unitOfWork.ProductRepository.SaveChangesAsync();
+        }
 
         #endregion
 
@@ -63,7 +97,7 @@ namespace OnlineShop.Services
         {
             await _unitOfWork.ProductRepository
                 .DeleteAsync(id);                        
-        }       
+        }      
 
         #endregion
 
