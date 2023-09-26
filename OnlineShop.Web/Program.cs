@@ -33,6 +33,7 @@ try
     builder.Services.AddControllersWithViews(options =>
     {
         options.Filters.Add<GlobalExceptionFilter>();
+        options.Filters.Add<GlobalActionFilter>();
     });
 
     var app = builder.Build();

@@ -6,9 +6,9 @@ namespace OnlineShop.Web.Filters
 {
     public class GlobalExceptionFilter : IExceptionFilter
     {
-        private readonly ILogger _logger;
+        private readonly ILogger<GlobalExceptionFilter> _logger;
 
-        public GlobalExceptionFilter(ILogger logger)
+        public GlobalExceptionFilter(ILogger<GlobalExceptionFilter> logger)
         {
             _logger = logger;
         }
