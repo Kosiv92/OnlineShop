@@ -2,7 +2,6 @@
 using OnlineShop.Domain;
 using AutoMapper;
 using AutoMapper.QueryableExtensions;
-using Microsoft.Extensions.Logging;
 using Microsoft.EntityFrameworkCore;
 using OnlineShop.Web.Models.Product;
 
