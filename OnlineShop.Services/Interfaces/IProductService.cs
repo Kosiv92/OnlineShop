@@ -10,10 +10,10 @@ namespace OnlineShop.Services.Interfaces
 
         public Task<ProductEditRequest> GetProductEditDTOAsync(int id);
 
-        public Task Delete(int id);
+        public Task<int> Delete(int id);
 
-        public Task Create(ProductCreateRequest request);
+        public Task<object> Create(ProductCreateRequest request);
 
-        public Task Edit(ProductEditRequest request);
+        public Task<object> Edit(ProductEditRequest request);
     }
 }

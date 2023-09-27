@@ -26,8 +26,7 @@ namespace OnlineShop.Web.Controllers
         public ActionResult Index()
         {
             IQueryable<ProductListItemDTO> productsDTO = null!;
-
-            _logger.LogDebug($"User {HttpContext.User.Identity.Name} try to get Index view");
+                       
             try
             {
                 productsDTO = _productService.GetAllDTO();
@@ -36,10 +35,7 @@ namespace OnlineShop.Web.Controllers
             catch (Exception ex)
             {
                 _logger.LogError($"Exception {ex.Message} throw while {HttpContext.User.Identity.Name} try to get Index view");
-            }
-
-
-            _logger.LogDebug($"User {HttpContext.User.Identity.Name} successfully get Index view");
+            }                                   
 
             return View(productsDTO);
         }
@@ -52,7 +48,7 @@ namespace OnlineShop.Web.Controllers
                 return NotFound();
             }
 
-            var productDTO = await _productService.GetProductInfoDTOAsync(id);
+            ProductInfoDTO productDTO = await _productService.GetProductInfoDTOAsync(id);
 
             if (productDTO is null)
             {
@@ -111,7 +107,7 @@ namespace OnlineShop.Web.Controllers
                 return NotFound();
             }
 
-            var editDTO = await _productService.GetProductEditDTOAsync(id);
+            ProductEditRequest editDTO = await _productService.GetProductEditDTOAsync(id);
 
             if (editDTO is null)
             {

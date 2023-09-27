@@ -20,7 +20,7 @@ namespace OnlineShop.Services
 
         #region CREATE
 
-        public async Task Create(ProductCreateRequest request)
+        public async Task<object> Create(ProductCreateRequest request)
         {
             var newProduct = _mapper.Map<Product>(request);
 
@@ -32,6 +32,8 @@ namespace OnlineShop.Services
             }
 
             await _unitOfWork.ProductRepository.CreateAsync(newProduct);
+
+            return newProduct;
         }
 
         #endregion
@@ -67,7 +69,7 @@ namespace OnlineShop.Services
 
         #region UPDATE
 
-        public async Task Edit(ProductEditRequest request)
+        public async Task<object> Edit(ProductEditRequest request)
         {
             var editProduct = await _unitOfWork.ProductRepository.GetById(request.Id);
 
@@ -87,16 +89,24 @@ namespace OnlineShop.Services
             editProduct.Categories = categories;
 
             await _unitOfWork.ProductRepository.SaveChangesAsync();
+
+            return editProduct;
         }
 
         #endregion
 
         #region DELETE
 
-        public async Task Delete(int id)
+        public async Task<int> Delete(int id)
         {
+            Product productToDelete = await _unitOfWork.ProductRepository.GetById(id);
+            
+
+
             await _unitOfWork.ProductRepository
-                .DeleteAsync(id);                        
+                .DeleteAsync(productToDelete.Id);
+
+            return productToDelete.Id;
         }      
 
         #endregion
