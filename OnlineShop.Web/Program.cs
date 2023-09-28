@@ -31,6 +31,9 @@ try
     builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
         .AddEntityFrameworkStores<ApplicationDbContext>();
 
+    builder.Services.AddEndpointsApiExplorer();
+    builder.Services.AddSwaggerGen();
+
     builder.Services.AddControllersWithViews();
 
     var app = builder.Build();
@@ -39,6 +42,8 @@ try
     if (app.Environment.IsDevelopment())
     {
         app.UseMigrationsEndPoint();
+        app.UseSwagger();
+        app.UseSwaggerUI();
     }
     else
     {
