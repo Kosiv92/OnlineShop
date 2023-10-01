@@ -17,5 +17,11 @@ namespace OnlineShop.Services.Tests.Common
             context.Database.EnsureCreated();
             return context;            
         }
+
+        public static void Destroy(ApplicationDbContext context)
+        {
+            context.Database.EnsureDeleted();
+            context.Dispose();
+        }
     }
 }
