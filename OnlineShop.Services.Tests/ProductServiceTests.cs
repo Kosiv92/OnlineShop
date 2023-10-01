@@ -1,17 +1,23 @@
+using AutoMapper;
+using Microsoft.Extensions.DependencyInjection;
 using Moq;
 using OnlineShop.Contracts;
 using OnlineShop.Services.Interfaces;
+using OnlineShop.Services.Tests.Common;
+using OnlineShop.Web.Common;
 
 namespace OnlineShop.Services.Tests
 {
-    public class ProductServiceTests
+    public class ProductServiceTests : IClassFixture<TestFixture>
     {
         private Mock<IProductService> _productServiceMock
-                            = new Mock<IProductService>();        
+                            = new Mock<IProductService>(); 
+        private IServiceProvider _serviceProvider;
 
-        public ProductServiceTests() 
+        public ProductServiceTests(TestFixture testFixture) 
         {
-            _productServiceMock = new Mock<IProductService>();             
+            _productServiceMock = new Mock<IProductService>();
+            _serviceProvider = testFixture.ServiceProvider;
         }
         
         [Fact]
@@ -28,6 +34,23 @@ namespace OnlineShop.Services.Tests
 
             //Assert
             Assert.NotNull(receivedDTO);
+        }
+
+        [Fact]
+        public async Task It_Returns_NotNull_GetAllDTO()
+        {
+            //Assert
+            var ass = typeof(ProductProfile).Assembly;
+
+            IProductService productService = new ProductService(_serviceProvider.GetRequiredService<IUnitOfWork>(),
+                _serviceProvider.GetRequiredService<IMapper>());
+
+            //Act
+            IQueryable<ProductListItemDTO> productListItemDTOs = productService.GetAllDTO();
+
+            //Assert
+            Assert.NotNull(productListItemDTOs);
+
         }
 
 
