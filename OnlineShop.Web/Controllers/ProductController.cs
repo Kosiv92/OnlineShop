@@ -7,7 +7,6 @@ using OnlineShop.Web.Models.Product;
 using OnlineShop.Contracts;
 using OnlineShop.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using System.Linq;
 
 namespace OnlineShop.Web.Controllers
 {
@@ -30,7 +29,7 @@ namespace OnlineShop.Web.Controllers
         public ActionResult Index()
         {
             IQueryable<ProductListItemDTO> productsDTO = null!;
-                       
+
             try
             {
                 productsDTO = _productService.GetAllDTO();
@@ -39,7 +38,7 @@ namespace OnlineShop.Web.Controllers
             catch (Exception ex)
             {
                 _logger.LogError($"Exception {ex.Message} throw while {HttpContext.User.Identity.Name} try to get Index view");
-            }                                   
+            }
 
             return View(productsDTO);
         }
@@ -72,7 +71,7 @@ namespace OnlineShop.Web.Controllers
                 .Select(c => new SelectListItem(c.Name, c.Id.ToString()))
             };
 
-            return View(productCreateVM);
+            return View(CreateNewProductCreateVM());
         }
 
         [HttpPost]
@@ -81,13 +80,7 @@ namespace OnlineShop.Web.Controllers
         {
             if (!ModelState.IsValid)
             {
-                return View(new ProductCreateVM
-                {
-                    Request = request,
-                    CategorySelectListItem = _categoryService
-                        .GetAllDTO()
-                        .Select(c => new SelectListItem(c.Name, c.Id.ToString()))
-                });
+                return View(CreateNewProductCreateVM(request));
             }
 
             try
@@ -98,9 +91,20 @@ namespace OnlineShop.Web.Controllers
             }
             catch
             {
-                return RedirectToAction(nameof(HomeController.Error), 
+                return RedirectToAction(nameof(HomeController.Error),
                     nameof(HomeController));
             }
+        }
+
+        private ProductCreateVM CreateNewProductCreateVM(ProductCreateRequest request = null)
+        {
+            return new ProductCreateVM
+            {
+                Request = request == null ? new ProductCreateRequest() : request,
+                CategorySelectListItem = _categoryService
+                        .GetAllDTO()
+                        .Select(c => new SelectListItem(c.Name, c.Id.ToString()))
+            };
         }
 
         [HttpGet]
@@ -116,32 +120,18 @@ namespace OnlineShop.Web.Controllers
             if (editDTO is null)
             {
                 return NotFound();
-            }
+            }                       
 
-            var editVM = new ProductEditVM()
-            {
-                Request = editDTO,
-                CategorySelectListItem = _categoryService
-                .GetAllDTO()
-                .Select(c => new SelectListItem(c.Name, c.Id.ToString()))
-            };
-
-            return View(editVM);
+            return View(CreateNewProductEditVM(editDTO));
         }
-                
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(ProductEditRequest request)
         {
             if (!ModelState.IsValid)
             {
-                return View(new ProductEditVM
-                {
-                    Request = request,
-                    CategorySelectListItem = _categoryService
-                        .GetAllDTO()
-                        .Select(c => new SelectListItem(c.Name, c.Id.ToString()))
-                });
+                return View(CreateNewProductEditVM(request));
             }
 
             try
@@ -156,6 +146,18 @@ namespace OnlineShop.Web.Controllers
                     nameof(HomeController));
             }
         }
+
+        private ProductEditVM CreateNewProductEditVM(ProductEditRequest request)
+        {
+            return new ProductEditVM()
+            {
+                Request = request,
+                CategorySelectListItem = _categoryService
+                .GetAllDTO()
+                .Select(c => new SelectListItem(c.Name, c.Id.ToString()))
+            };
+        }
+
 
         [HttpPost]
         [ValidateAntiForgeryToken]
