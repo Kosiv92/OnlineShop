@@ -6,6 +6,7 @@ using NLog.Web;
 using OnlineShop.Services;
 using OnlineShop.DbContext;
 using System.Reflection;
+using OnlineShop.Web.Filters;
 
 var logger = NLog.LogManager
     .Setup()
@@ -31,10 +32,15 @@ try
     builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
         .AddEntityFrameworkStores<ApplicationDbContext>();
 
+
     builder.Services.AddEndpointsApiExplorer();
     builder.Services.AddSwaggerGen();
 
-    builder.Services.AddControllersWithViews();
+    builder.Services.AddControllersWithViews(options =>
+    {
+        options.Filters.Add<GlobalExceptionFilter>();
+        options.Filters.Add<GlobalActionFilter>();
+    });
 
     var app = builder.Build();
 
