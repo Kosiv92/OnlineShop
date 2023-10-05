@@ -1,14 +1,16 @@
 ﻿using System.ComponentModel;
 
-namespace OnlineShop.Web
+namespace OnlineShop.Contracts
 {
     public record ProductListItemDTO
     {
+        public int Id { get; init; }
+
         [DisplayName("Name")]
         public string Name { get; init; }
 
         [DisplayName("Cost")]
-        public decimal Cost { get; init; }
+        public decimal Price { get; init; }
 
         [DisplayName("Categories")]
         public string Categories { get; init; }

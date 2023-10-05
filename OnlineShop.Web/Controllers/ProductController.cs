@@ -4,122 +4,173 @@ using AutoMapper;
 using AutoMapper.QueryableExtensions;
 using Microsoft.EntityFrameworkCore;
 using OnlineShop.Web.Models.Product;
+using OnlineShop.Contracts;
+using OnlineShop.Services.Interfaces;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using System.Linq;
 
 namespace OnlineShop.Web.Controllers
 {
     public class ProductController : Controller
     {
-        IRepository<Product> _productRepository;
-        IRepository<Category> _categoryRepository;
         ILogger<ProductController> _logger;
-        IMapper _mapper;
+        IProductService _productService;
+        ICategoryService _categoryService;
 
-        public ProductController(IRepository<Product> productRepository, 
-            IRepository<Category> categoryRepository, ILogger<ProductController> logger, 
-            IMapper mapper)
+        public ProductController(ILogger<ProductController> logger,
+            IProductService productService,
+            ICategoryService categoryService)
         {
-            _productRepository = productRepository;
-            _categoryRepository = categoryRepository;
             _logger = logger;
-            _mapper = mapper;
+            _productService = productService;
+            _categoryService = categoryService;
         }
 
-
-        // GET: ProductController
+        [HttpGet]
         public ActionResult Index()
         {
             IQueryable<ProductListItemDTO> productsDTO = null!;
-
-            _logger.LogDebug($"User {HttpContext.User.Identity.Name} try to get Index view");
+                       
             try
             {
-                var products = _productRepository
-                    .GetAll()
-                    .Include(p => p.Categories);                
-
-                productsDTO = products
-                    .ProjectTo<ProductListItemDTO>(_mapper.ConfigurationProvider);                                
+                productsDTO = _productService.GetAllDTO();
 
             }
             catch (Exception ex)
             {
                 _logger.LogError($"Exception {ex.Message} throw while {HttpContext.User.Identity.Name} try to get Index view");
-            }
-
-
-            _logger.LogDebug($"User {HttpContext.User.Identity.Name} successfully get Index view");
+            }                                   
 
             return View(productsDTO);
         }
 
-        // GET: ProductController/Details/5
-        public ActionResult Details(int id)
+        [HttpGet]
+        public async Task<IActionResult> Details(int id)
         {
-            return View();
+            if (id <= 0)
+            {
+                return NotFound();
+            }
+
+            ProductInfoDTO productDTO = await _productService.GetProductInfoDTOAsync(id);
+
+            if (productDTO is null)
+            {
+                return NotFound();
+            }
+
+            return View(productDTO);
         }
 
-        // GET: ProductController/Create
+        [HttpGet]
         public ActionResult Create()
         {
-            var productCreateVM = new ProductCreateVM();
-            
+            var productCreateVM = new ProductCreateVM()
+            {
+                CategorySelectListItem = _categoryService
+                .GetAllDTO()
+                .Select(c => new SelectListItem(c.Name, c.Id.ToString()))
+            };
+
             return View(productCreateVM);
         }
 
-        // POST: ProductController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(IFormCollection collection)
+        public async Task<IActionResult> Create(ProductCreateRequest request)
         {
+            if (!ModelState.IsValid)
+            {
+                return View(new ProductCreateVM
+                {
+                    Request = request,
+                    CategorySelectListItem = _categoryService
+                        .GetAllDTO()
+                        .Select(c => new SelectListItem(c.Name, c.Id.ToString()))
+                });
+            }
+
             try
             {
+                await _productService.Create(request);
+
                 return RedirectToAction(nameof(Index));
             }
             catch
             {
-                return View();
+                return RedirectToAction(nameof(HomeController.Error), 
+                    nameof(HomeController));
             }
         }
 
-        // GET: ProductController/Edit/5
-        public ActionResult Edit(int id)
+        [HttpGet]
+        public async Task<IActionResult> Edit(int id)
         {
-            return View();
-        }
+            if (id <= 0)
+            {
+                return NotFound();
+            }
 
-        // POST: ProductController/Edit/5
+            ProductEditRequest editDTO = await _productService.GetProductEditDTOAsync(id);
+
+            if (editDTO is null)
+            {
+                return NotFound();
+            }
+
+            var editVM = new ProductEditVM()
+            {
+                Request = editDTO,
+                CategorySelectListItem = _categoryService
+                .GetAllDTO()
+                .Select(c => new SelectListItem(c.Name, c.Id.ToString()))
+            };
+
+            return View(editVM);
+        }
+                
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, IFormCollection collection)
+        public async Task<IActionResult> Edit(ProductEditRequest request)
         {
+            if (!ModelState.IsValid)
+            {
+                return View(new ProductEditVM
+                {
+                    Request = request,
+                    CategorySelectListItem = _categoryService
+                        .GetAllDTO()
+                        .Select(c => new SelectListItem(c.Name, c.Id.ToString()))
+                });
+            }
+
             try
             {
+                await _productService.Edit(request);
+
                 return RedirectToAction(nameof(Index));
             }
             catch
             {
-                return View();
+                return RedirectToAction(nameof(HomeController.Error),
+                    nameof(HomeController));
             }
         }
 
-        // GET: ProductController/Delete/5
-        public ActionResult Delete(int id)
-        {
-            return View();
-        }
-
-        // POST: ProductController/Delete/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id, IFormCollection collection)
+        public async Task<IActionResult> Delete(int id)
         {
+            if (id <= 0) NotFound();
+
             try
             {
+                await _productService.Delete(id);
                 return RedirectToAction(nameof(Index));
             }
-            catch
+            catch (Exception ex)
             {
-                return View();
+                return BadRequest(ex.Message);
             }
         }
     }

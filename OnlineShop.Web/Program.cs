@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using NLog;
 using NLog.Web;
-using OnlineShop.Domain;
+using OnlineShop.Services;
 using OnlineShop.DbContext;
 using System.Reflection;
 using OnlineShop.Web.Filters;
@@ -24,6 +24,8 @@ try
     builder.Services.AddDataAccess(builder.Configuration);
 
     builder.Services.AddDatabaseDeveloperPageExceptionFilter();
+
+    builder.Services.AddServicesCollection();
 
     builder.Services.AddAutoMapper(Assembly.GetExecutingAssembly());
 

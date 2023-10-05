@@ -3,9 +3,9 @@ using OnlineShop.Contracts;
 
 namespace OnlineShop.Web.Models.Product
 {
-    public class ProductCreateVM
+    public class ProductEditVM
     {
-        public ProductCreateRequest Request { get; set; }
+        public ProductEditRequest Request { get; set; }
 
         public IEnumerable<SelectListItem> CategorySelectListItem { get; set; }
     }

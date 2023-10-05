@@ -1,0 +1,65 @@
+﻿@model OnlineShop.Web.Models.Product.ProductCreateVM
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<h1>Create</h1>
+
+<h4>ProductCreateVM</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group row">
+                <div class="col-4">
+                    <label asp-for="@Model.Request.Name"></label>
+                </div>
+                <div class="col-4">
+                    <input asp-for="@Model.Request.Name" class="form-control" type="text" />
+                    <span asp-validation-for="@Model.Request.Name" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="form-group row">
+                <div class="col-4">
+                    <label asp-for="@Model.Request.Description"></label>
+                </div>
+                <div class="col-4">
+                    <input asp-for="@Model.Request.Description" class="form-control" type="text" />                    
+                </div>
+            </div>
+            <div class="form-group row">
+                <div class="col-4">
+                    <label asp-for="@Model.Request.Price"></label>
+                </div>
+                <div class="col-4">
+                    <input asp-for="@Model.Request.Price" class="form-control" type="number" />
+                    <span asp-validation-for="@Model.Request.Price" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="form-group row">
+                <div class="col-4">
+                    <label asp-for="@Model.Request.CategoryIds"></label>
+                </div>
+                <div class="col-4">
+                    <select asp-items="@Model.CategorySelectListItem" asp-for="@Model.Request.CategoryIds" multiple></select>                    
+                    <span asp-validation-for="@Model.Request.Price" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}
