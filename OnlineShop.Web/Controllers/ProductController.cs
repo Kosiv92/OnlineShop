@@ -1,4 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using OnlineShop.Domain;
+using AutoMapper;
+using AutoMapper.QueryableExtensions;
+using Microsoft.EntityFrameworkCore;
 using OnlineShop.Web.Models.Product;
 using OnlineShop.Contracts;
 using OnlineShop.Services.Interfaces;
