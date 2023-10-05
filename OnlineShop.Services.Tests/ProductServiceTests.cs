@@ -2,6 +2,7 @@ using AutoMapper;
 using Microsoft.Extensions.DependencyInjection;
 using Moq;
 using OnlineShop.Contracts;
+using OnlineShop.DbContext;
 using OnlineShop.Services.Interfaces;
 using OnlineShop.Services.Tests.Common;
 using OnlineShop.Web.Common;
@@ -18,6 +19,10 @@ namespace OnlineShop.Services.Tests
         {
             _productServiceMock = new Mock<IProductService>();
             _serviceProvider = testFixture.ServiceProvider;
+
+            ApplicationDbContext dbContext = _serviceProvider.GetService<ApplicationDbContext>();
+            dbContext = ApplicationContextFactory.Create();
+            dbContext.SaveChangesAsync();
         }
         
         [Fact]
