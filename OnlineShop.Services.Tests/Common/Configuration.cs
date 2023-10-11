@@ -33,7 +33,7 @@ namespace OnlineShop.Services.Tests.Common
         }
 
         private static IServiceCollection ConfigureInMemoryContext<T>(this IServiceCollection services)
-            where T : IdentityDbContext
+            where T : ApplicationDbContext
         {
             var serviceProvider = new ServiceCollection()
                 .AddEntityFrameworkInMemoryDatabase()
@@ -43,7 +43,7 @@ namespace OnlineShop.Services.Tests.Common
                 options.UseInMemoryDatabase("InMemoryDb", builder => { });
                 options.UseInternalServiceProvider(serviceProvider);
             });
-            services.AddTransient<IdentityDbContext, T>();
+            services.AddTransient<ApplicationDbContext, T>();
 
             return services;
         }
