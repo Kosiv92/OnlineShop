@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.AspNetCore.Identity.UI.Services;
+using Microsoft.Extensions.DependencyInjection;
 using OnlineShop.Services.Interfaces;
 
 namespace OnlineShop.Services
@@ -12,6 +13,8 @@ namespace OnlineShop.Services
             services.AddTransient<IProductService, ProductService>();
 
             services.AddTransient<ICategoryService, CategoryService>();
+
+            services.AddTransient<IEmailSender, EmailSender>();
 
             return services;
         }
