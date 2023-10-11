@@ -8,6 +8,7 @@ using OnlineShop.Contracts;
 using OnlineShop.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using System.Linq;
+using Microsoft.AspNetCore.Authorization;
 
 namespace OnlineShop.Web.Controllers
 {
@@ -30,7 +31,7 @@ namespace OnlineShop.Web.Controllers
         public ActionResult Index()
         {
             IQueryable<ProductListItemDTO> productsDTO = null!;
-                       
+
             try
             {
                 productsDTO = _productService.GetAllDTO();
@@ -39,7 +40,7 @@ namespace OnlineShop.Web.Controllers
             catch (Exception ex)
             {
                 _logger.LogError($"Exception {ex.Message} throw while {HttpContext.User.Identity.Name} try to get Index view");
-            }                                   
+            }
 
             return View(productsDTO);
         }
@@ -62,6 +63,7 @@ namespace OnlineShop.Web.Controllers
             return View(productDTO);
         }
 
+        [Authorize(Roles = "Manager,Admin")]
         [HttpGet]
         public ActionResult Create()
         {
@@ -75,6 +77,7 @@ namespace OnlineShop.Web.Controllers
             return View(productCreateVM);
         }
 
+        [Authorize(Roles = "Manager,Admin")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(ProductCreateRequest request)
