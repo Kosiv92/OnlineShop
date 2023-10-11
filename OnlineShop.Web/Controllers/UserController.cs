@@ -11,5 +11,11 @@ namespace OnlineShop.Web.Controllers
         {
             return View();
         }
+
+        [HttpPost]
+        public IActionResult AddNewRole(string RoleName) 
+        {
+            return RedirectToAction("Index");
+        }
     }
 }
