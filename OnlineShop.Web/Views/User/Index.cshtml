@@ -1,11 +1,29 @@
-﻿<div class="container">
+﻿@model RoleModel
+
+<div class="container">
     <div class="row">
         <div class="col-12">
-            <h5>Role Managment</h5>
-            <form class="form-control" method="post" asp-action="AddNewRole">
-                <label class="form-label">Add new role</label>
-                <input class="form-text" type="text" name="RoleName" />
+            <h5>Create new Role</h5>
+            <form class="form-control" method="post" asp-action="CreateNewRole">
+                <label class="form-label">Create new role</label>
+                <input class="form-text" type="text" asp-for="@Model.RoleName" />
+                <button class="btn btn-success" type="submit">Create</button>
+            </form>
+        </div>
+        <div class="col-12">
+            <h5>Assign Role</h5>
+            <form class="form-control" method="post" asp-action="AssignRole">
+                <label class="form-label">Add role for current user</label>
+                <input class="form-text" type="text" asp-for="@Model.RoleName" />
                 <button class="btn btn-success" type="submit">Add</button>
+            </form>
+        </div>
+        <div class="col-12">
+            <h5>Remove Role</h5>
+            <form class="form-control" method="post" asp-action="RemoveRole">
+                <label class="form-label">Remove role for current user</label>
+                <input class="form-text" type="text" asp-for="@Model.RoleName" />
+                <button class="btn btn-success" type="submit">Remove</button>
             </form>
         </div>
     </div>

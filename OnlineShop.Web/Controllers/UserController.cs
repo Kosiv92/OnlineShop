@@ -2,10 +2,11 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using OnlineShop.DbContext;
+using OnlineShop.Web.Models;
 
 namespace OnlineShop.Web.Controllers
 {
-    [Authorize(Roles ="Admin")]
+    //[Authorize(Roles ="Admin")]
     public class UserController : Controller
     {
         private readonly ILogger<UserController> _logger;
@@ -30,9 +31,9 @@ namespace OnlineShop.Web.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> AddNewRole(string roleName) 
+        public async Task<IActionResult> CreateNewRole(RoleModel roleModel) 
         {
-            roleName = roleName.Trim();
+            string roleName = roleModel.RoleName.Trim();
 
             if (!string.IsNullOrEmpty(roleName))
             {
@@ -45,6 +46,32 @@ namespace OnlineShop.Web.Controllers
                     });
                 }
             }  
+            return RedirectToAction("Index");
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> AssignRole(RoleModel roleModel)
+        {
+            string roleName = roleModel.RoleName.Trim();
+
+            if (!string.IsNullOrEmpty(roleName))
+            {
+                var usr = await _userManager.GetUserAsync(this.User);
+                await _userManager.AddToRoleAsync(usr, roleName);
+            }
+            return RedirectToAction("Index");
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> RemoveRole(RoleModel roleModel)
+        {
+            string roleName = roleModel.RoleName.Trim();
+
+            if (!string.IsNullOrEmpty(roleName))
+            {
+                var usr = await _userManager.GetUserAsync(this.User);
+                await _userManager.RemoveFromRoleAsync(usr, roleName);
+            }
             return RedirectToAction("Index");
         }
     }
