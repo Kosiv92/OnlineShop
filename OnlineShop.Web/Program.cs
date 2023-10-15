@@ -32,7 +32,12 @@ try
     builder.Services.AddDefaultIdentity<ApplicationIdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
         .AddRoles<IdentityRole>()
         .AddEntityFrameworkStores<ApplicationDbContext>();
-        
+
+    builder.Services.AddAuthorization(options =>
+    {
+        options.AddPolicy("Managers", policy => policy.RequireRole("Admin", "Manager"));
+    });
+    
     builder.Services.AddControllersWithViews(options =>
     {
         options.Filters.Add<GlobalExceptionFilter>();

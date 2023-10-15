@@ -6,7 +6,7 @@ using OnlineShop.Web.Models;
 
 namespace OnlineShop.Web.Controllers
 {
-    //[Authorize(Roles ="Admin")]
+    [Authorize(Policy ="Managers")]
     public class UserController : Controller
     {
         private readonly ILogger<UserController> _logger;
